@@ -192,7 +192,7 @@ export function registerTasksTool(
       // Bulk operation fields
       taskIds: z.array(z.number()).optional(),
       field: z.string().optional(),
-      value: z.unknown().optional(),
+      value: z.union([z.string(), z.number(), z.boolean(), z.null(), z.array(z.union([z.string(), z.number()]))]).optional(),
       tasks: z
         .array(
           z.object({
