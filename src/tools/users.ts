@@ -94,7 +94,7 @@ export function registerUsersTool(server: McpServer, authManager: AuthManager, _
       language: z.string().optional(),
       timezone: z.string().optional(),
       weekStart: z.number().min(0).max(6).optional(),
-      frontendSettings: z.record(z.unknown()).optional(),
+      frontendSettings: z.object({}).passthrough().optional(),
 
       // Notification preferences
       emailRemindersEnabled: z.boolean().optional(),
