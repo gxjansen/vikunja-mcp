@@ -335,13 +335,16 @@ export function registerTemplatesTool(server: McpServer, authManager: AuthManage
               }
               const template = JSON.parse(savedFilter.filter) as TemplateData;
 
+              // Cast variables to expected type (schema uses passthrough for MCP SDK compatibility)
+              const variables = (args.variables || {}) as Record<string, string>;
+
               // Create new project from template
               const projectData: Partial<Project> = {
-                title: applyVariables(args.projectName, args.variables || {}),
+                title: applyVariables(args.projectName, variables),
                 ...(template.projectData.description && {
                   description: applyVariables(
                     template.projectData.description,
-                    args.variables || {},
+                    variables,
                   ),
                 }),
                 ...(args.parentProjectId && { parent_project_id: args.parentProjectId }),
@@ -362,10 +365,10 @@ export function registerTemplatesTool(server: McpServer, authManager: AuthManage
               for (const taskTemplate of template.tasks) {
                 try {
                   const taskData: Partial<Task> = {
-                    title: applyVariables(taskTemplate.title, args.variables || {}),
+                    title: applyVariables(taskTemplate.title, variables),
                     project_id: newProject.id ?? 0,
                     ...(taskTemplate.description && {
-                      description: applyVariables(taskTemplate.description, args.variables || {}),
+                      description: applyVariables(taskTemplate.description, variables),
                     }),
                     ...(taskTemplate.due_date && { due_date: taskTemplate.due_date }),
                     ...(taskTemplate.priority !== undefined && { priority: taskTemplate.priority }),
